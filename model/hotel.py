@@ -1,14 +1,13 @@
-from model.sql_alchemy import db
+from model.sql_alchemy import bd
 
 
-
-class HotelModel(db.Model):
-    __tabela__ = 'hoteis'
-    hotel_id = db.Column(db.String, primary_key=True)
-    nome = db.Column(db.String(100), nullable=False)
-    estrelas = db.Column(db.Integer, nullable=False)
-    diaria = db.Column(db.Float(precision=2), nullable=False)
-    cidade = db.Column(db.String(40), nullable=False)
+class HotelModel(bd.Model):
+    __tablename__ = "hoteis"  # Mapeamento da tabela
+    hotel_id = bd.Column(bd.String, primary_key=True)
+    nome = bd.Column(bd.String(100), nullable=False)
+    estrelas = bd.Column(bd.SmallInteger, nullable=False)
+    diaria = bd.Column(bd.Float(precision=2), nullable=False)
+    cidade = bd.Column(bd.String(40), nullable=False)
 
     @classmethod
     def find_hotel(cls, hotel_id):
@@ -21,26 +20,19 @@ class HotelModel(db.Model):
         self.diaria = dados["diaria"] or self.diaria
         self.cidade = dados["cidade"] or self.cidade
 
-        #key_error
+    def delete(self):
+        bd.session.delete(self)
+        bd.session.commit()
 
     def save_hotel(self):
-        db.session.add(self)
-        db.session.commit()  # Confirmando a transação
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
+        bd.session.add(self)
+        bd.session.commit()
 
     def to_dict(self):
         return {
-            'hotel_id': self.hotel_id,
-            'nome': self.nome,
-            'cidade': self.cidade,
-            'estrelas': self.estrelas,
-            'diaria': self.diaria
+            "hotel_id": self.hotel_id,
+            "nome": self.nome,
+            "cidade": self.cidade,
+            "estrelas": self.estrelas,
+            "diaria": self.diaria,
         }
-
-HOTEIS = [
-    HotelModel('ibis', 'IBIS', 'Olinda', 4, 150.00),
-    HotelModel('delmar', 'Delmar HotelResource', 'Aracaju', 4, 210.00),
-]
