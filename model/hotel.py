@@ -3,7 +3,7 @@ from model.sql_alchemy import bd
 
 class HotelModel(bd.Model):
     __tablename__ = "hoteis"  # Mapeamento da tabela
-    hotel_id = bd.Column(bd.String, primary_key=True)
+    hotel_id = bd.Column(bd.Integer, primary_key=True, autoincrement=True)
     nome = bd.Column(bd.String(100), nullable=False)
     estrelas = bd.Column(bd.SmallInteger, nullable=False)
     diaria = bd.Column(bd.Float(precision=2), nullable=False)
